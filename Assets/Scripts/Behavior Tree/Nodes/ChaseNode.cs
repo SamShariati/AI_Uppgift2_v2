@@ -19,6 +19,7 @@ public class ChaseNode : Node
     public override NodeState Evaluate()
     {
         ai.SetColor(Color.yellow);
+        Debug.Log("Chasing Player: Still in chasing range...");
         float distance = Vector3.Distance(target.position, agent.transform.position);
 
         if (distance > 0.2f)

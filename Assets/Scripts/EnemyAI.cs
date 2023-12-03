@@ -24,10 +24,12 @@ public class EnemyAI : MonoBehaviour
 
     private Node topNode;
 
-    private float currentHealth
+    public float _currentHealth = 100;
+
+    public float currentHealth
     {
-        get { return currentHealth; }
-        set { currentHealth = Mathf.Clamp(value, 0, startingHealth); }
+        get { return _currentHealth; }
+        set { _currentHealth = Mathf.Clamp(value, 0, startingHealth); }
     }
 
     private void Awake()
@@ -37,25 +39,81 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        currentHealth = startingHealth;
+        _currentHealth = startingHealth;
         material = GetComponent<MeshRenderer>().material;
         ConstructBehaviorTree();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && _currentHealth > 10)
+        {
+            _currentHealth -= 10f;
+
+        }
+        topNode.Evaluate();
+
+
+        if (topNode.nodeState == NodeState.FAILURE)
+        {
+            SetColor(Color.red);
+            agent.isStopped = true;
+        }
+
+        if (currentHealth < startingHealth)
+        {
+            _currentHealth += Time.deltaTime * healthRestoreRate;
+        }
+        
+        
+    }
+
+
+    //private void OnMouseDown()
+    //{
+    //    _currentHealth -= 10f;
+    //}
+
+
     private void ConstructBehaviorTree()
     {
+//--------------------------------ALLA CUSTOM NODES / DVS ALLA NODER SOM ÄR VARKEN SEQUENCE- ELLER SELECTOR NODES-----------------------------
         IsCoverAvailableNode coverAvailableNode = new IsCoverAvailableNode(availableCovers, playerTransform, this);
         GoToCoverNode goToCoverNode = new GoToCoverNode(agent, this);
+        HealthNode healthNode = new HealthNode(this, lowHealthThreshhold);
+        IsCoveredNode isCoveredNode = new IsCoveredNode(playerTransform, transform);
+        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, this);
+        RangeNode chasingRangeNode = new RangeNode(chasingRange, playerTransform, transform);
+        RangeNode shootingRangeNode = new RangeNode(shootingRange, playerTransform, transform);
+        ShootNode shootNode = new ShootNode(agent, this);
+
+
+        //-------------------------------ALLA SEQUENCE OCH SELECTOR NODES I KORREKT ORDNING (FRÅN HÖGER GREN TILL VÄNSTER GREN, FRÅN BOT TILL TOP)---------------
+
+        Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
+
+        Sequence shootSequence = new Sequence(new List<Node> { shootingRangeNode, shootNode });
+
+        Sequence goToCoverSequence = new Sequence(new List<Node> { coverAvailableNode, goToCoverNode });
+
+        Selector findCoverSelector = new Selector(new List<Node> { goToCoverSequence, chaseSequence });
+
+        Selector tryToTakeCoverSelector = new Selector(new List<Node> { isCoveredNode, findCoverSelector });
+
+        Sequence coverSequence = new Sequence(new List<Node> { healthNode, tryToTakeCoverSelector });
+
+        topNode= new Selector(new List<Node> { coverSequence, shootSequence, chaseSequence });
+
+        
+
+
     }
     public float GetCurrentHealth()
     {
-        return currentHealth;
+        return _currentHealth;
     }
 
-    private void Update()
-    {
-        currentHealth += Time.deltaTime * healthRestoreRate;
-    }
+    
 
     public void SetColor(Color green)
     {
@@ -69,6 +127,6 @@ public class EnemyAI : MonoBehaviour
 
     public Transform GetBestCoverSpot()
     {
-        throw new NotImplementedException();
+        return bestCoverSpot;
     }
 }

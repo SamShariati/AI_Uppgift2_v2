@@ -19,6 +19,8 @@ public class ShootNode : Node
     {
         agent.isStopped = true;
         ai.SetColor(Color.green);
+
+        Debug.Log("Shooting: PEW PEW PEW");
         return NodeState.RUNNING;
     }
 }

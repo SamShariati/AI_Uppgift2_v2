@@ -17,7 +17,7 @@ public class HealthNode : Node
 
     public override NodeState Evaluate()
     {
-        if (ai.GetCurrentHealth() <= threshhold)
+        if (ai.currentHealth <= threshhold)
         {
 
             return NodeState.SUCCESS;

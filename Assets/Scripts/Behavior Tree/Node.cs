@@ -6,7 +6,7 @@ using UnityEngine.XR;
 [System.Serializable]
 public abstract class Node
 {
-    protected NodeState nodeState;
+    public NodeState nodeState;
 
     public abstract NodeState Evaluate();
 }
