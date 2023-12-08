@@ -89,6 +89,7 @@ public class EnemyAI : MonoBehaviour
 
 
         //-------------------------------ALLA SEQUENCE OCH SELECTOR NODES I KORREKT ORDNING (FRÅN HÖGER GREN TILL VÄNSTER GREN, FRÅN BOT TILL TOP)---------------
+        //-------------------------------DET ÄR HÄR VI BYGGER TRÄDET------------------------------------------------
 
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
 
