@@ -9,6 +9,7 @@ public abstract class Node
     public NodeState nodeState;
 
     public abstract NodeState Evaluate();
+    
 }
 
 public enum NodeState

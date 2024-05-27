@@ -16,7 +16,7 @@ public class Sequence : Node
 
         bool isAnyNodeRunning = false;
 
-        foreach (var node in nodes)
+        foreach (Node node in nodes)
         {
             switch (node.Evaluate())
             {
@@ -38,7 +38,17 @@ public class Sequence : Node
                     break;
             }
         }
-        nodeState = isAnyNodeRunning ? NodeState.RUNNING : NodeState.SUCCESS;
+        if (isAnyNodeRunning == true)
+        {
+            nodeState = NodeState.RUNNING;
+        }
+        else
+        {
+            nodeState = NodeState.SUCCESS;
+        }
+        
+        
+        //nodeState = isAnyNodeRunning ? NodeState.RUNNING : NodeState.SUCCESS;
         return nodeState;
     }
 }

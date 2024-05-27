@@ -46,12 +46,16 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
+        //Behavior tree körs
+        topNode.Evaluate();
+
+
         if (Input.GetKeyDown(KeyCode.Space) && _currentHealth > 10)
         {
             _currentHealth -= 10f;
 
         }
-        topNode.Evaluate();
+        
 
 
         if (topNode.nodeState == NodeState.FAILURE)
@@ -77,11 +81,11 @@ public class EnemyAI : MonoBehaviour
 
     private void ConstructBehaviorTree()
     {
-//--------------------------------ALLA CUSTOM NODES / DVS ALLA NODER SOM ÄR VARKEN SEQUENCE- ELLER SELECTOR NODES-----------------------------
+//--------------------------------ALLA CONDITION OCH ACTION NODES---------------------------------------------------
         IsCoverAvailableNode coverAvailableNode = new IsCoverAvailableNode(availableCovers, playerTransform, this);
         GoToCoverNode goToCoverNode = new GoToCoverNode(agent, this);
         HealthNode healthNode = new HealthNode(this, lowHealthThreshhold);
-        IsCoveredNode isCoveredNode = new IsCoveredNode(playerTransform, transform);
+        IsCoveredNode isCoveredNode = new IsCoveredNode(playerTransform, transform, this);
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, this);
         RangeNode chasingRangeNode = new RangeNode(chasingRange, playerTransform, transform);
         RangeNode shootingRangeNode = new RangeNode(shootingRange, playerTransform, transform);

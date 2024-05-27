@@ -16,7 +16,7 @@ public class Selector : Node
 
 
 
-        foreach (var node in nodes)
+        foreach (Node node in nodes)
         {
             switch (node.Evaluate())
             {
