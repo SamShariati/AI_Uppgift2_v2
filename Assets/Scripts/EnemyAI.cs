@@ -73,12 +73,6 @@ public class EnemyAI : MonoBehaviour
     }
 
 
-    //private void OnMouseDown()
-    //{
-    //    _currentHealth -= 10f;
-    //}
-
-
     private void ConstructBehaviorTree()
     {
 //--------------------------------ALLA CONDITION OCH ACTION NODES---------------------------------------------------
